@@ -1,0 +1,69 @@
+name: SquareCore
+version: 0.0.1
+author: Cody
+main: com.Square.RetronixFreeze.Main
+api-version: 1.8
+commands:
+  alertson:
+    description: enables alerts
+    usage: /alertson
+  alertsoff:
+    description: Alerts off
+    usage: /alertsoff
+  gamemode:
+    description: Change gamemodes
+    usage: /gamemode <Gamemode> [Player]
+    aliases:
+      - "gm"
+  heal:
+    description: Heals a player or yourself
+    usage: /heal [Player]
+    aliases:
+      - "doctor"
+  help:
+    description: Provides you with a help menu
+    usage: /help
+    aliases:
+      - "guide"
+  checkhealth:
+    description: Check yours or another players health
+    usage: /checkhealth [Player]
+    aliases:
+      - "checkhp"
+      - "hp"
+      - "checkh"
+      - "phealth"
+  list:
+    description: Displays a list of players currently on the server.
+    usage: /list
+    aliases:
+      - "players"
+      - "online"
+      - "plist"
+  whois:
+    description: Shows information about a player, such as their IP address and last login time.
+    usage: /whois <Player>
+    aliases:
+      - "lookup"
+      - "profile"
+      - "userinfo"
+  checksql:
+    description: Check the SQL connnection
+    usage: /checksql <clearplaytime>
+    aliases:
+      - "sqlcheck"
+  playtime:
+    description: Check your playtime
+    usage: /playtime <Player>
+    aliases:
+      - "ptime"
+      - "playt"
+  tphome:
+    description: Teleports you to your home point
+    usage: /tphome
+    aliases:
+      - "home"
+      - "spawn"
+
+# Permissions ~
+# /gamemode (/gm) - sqc.gamemode

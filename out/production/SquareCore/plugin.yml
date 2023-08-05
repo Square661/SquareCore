@@ -1,0 +1,67 @@
+name: SquareCore
+version: 1.0.0
+author: Cody
+main: com.Square.RetronixFreeze.Main
+api-version: 1.8
+commands:
+  gamemode:
+    description: Change gamemodes
+    usage: /gamemode <Gamemode> [Player]
+    aliases:
+      - "gm"
+  heal:
+    description: Heals a player or yourself
+    usage: /heal [Player]
+    aliases:
+      - "doctor"
+  help:
+    description: Provides you with a help menu
+    usage: /help
+    aliases:
+      - "guide"
+  checkhealth:
+    description: Check yours or another players health
+    usage: /checkhealth [Player]
+    aliases:
+      - "checkhp"
+      - "hp"
+      - "checkh"
+      - "phealth"
+  list:
+    description: Displays a list of players currently on the server.
+    usage: /list
+    aliases:
+      - "players"
+      - "online"
+      - "plist"
+  checksql:
+    description: Check the SQL connnection
+    usage: /checksql <clearplayerdata> <clearplaytime> <clearanticheatdata>
+    aliases:
+      - "sqlcheck"
+  maintenance:
+    description: Toggle maintenance mode
+    usage: /maintenance
+    aliases:
+      - "closeserver"
+  spawn:
+    description: Teleport to spawn
+    usage: /spawn
+    aliases:
+      - "hub"
+  setspawn:
+    description: Set the spawn
+    usage: /setspawn
+    aliases:
+      - "sethub"
+
+# Permissions ~
+# /gamemode (/gm) - sqc.gamemode
+# /heal (/doctor) - sqc.heal
+# /help (/guide) - sqc.help
+# /checkhealth (/checkhp, /hp, /checkh, /phealth) - sqc.checkhealth
+# /list (/players, /online, /plist) - sqc.list
+# /checksql - sqc.checksql
+# /maintenance (/closeserver) - sqc.maintenance (sqc.staff excludes from maintenance mode)
+# /spawn (/hub) - sqc.spawn
+# /setspawn (/sethub) - sqc.setspawn
