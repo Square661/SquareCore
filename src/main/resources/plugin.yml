@@ -59,6 +59,12 @@ commands:
     usage: /rankcheck <player>
     aliases:
       - "checkrank"
+  vanish:
+    description: Toggle vanish
+    usage: /vanish
+    aliases:
+      - "v"
+
 
 # Permissions ~
 # /gamemode (/gm) - sqc.gamemode

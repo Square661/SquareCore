@@ -65,6 +65,7 @@ public class Main extends JavaPlugin {
         getCommand("maintenance").setExecutor(new Maintenance(this));
         getCommand("setspawn").setExecutor(new SetSpawn());
         getCommand("checkrank").setExecutor(new RankCheck());
+        getCommand("vanish").setExecutor(new Vanish(this));
 
 
         // Player commands

@@ -2,6 +2,7 @@ package commands.player;
 
 import com.Square.RetronixFreeze.Main;
 import com.Square.RetronixFreeze.functions.SimpleFunctions;
+import commands.admin.Vanish;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.ChatColor;
@@ -26,16 +27,20 @@ public class List implements CommandExecutor {
             Player[] players = plugin.getServer().getOnlinePlayers().toArray(new Player[0]);
             sender.sendMessage(ChatColor.YELLOW + "Players online (" + players.length + "):");
             for (Player player : players) {
-                String prefix = api.getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix();
-                if(prefix == null) {
-                    prefix = "&7";
-                    prefix = prefix.replace("&", "§");
-                } else {
-                    prefix = prefix.replace("&", "§");
+                if(Vanish.vanished.contains(player)) {
+                    break;
+                }else {
+                    String prefix = api.getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix();
+                    if (prefix == null) {
+                        prefix = "&7";
+                        prefix = prefix.replace("&", "§");
+                    } else {
+                        prefix = prefix.replace("&", "§");
+                    }
+                    // Call the RankColourCode function from the Main class, which returns ChatColor for the players rank, use that to display the players name in that colour
+                    sender.sendMessage(ChatColor.GRAY + "• " + prefix + " " + ChatColor.RESET + SimpleFunctions.rankColourCode(player) + player.getName());
+                    // Call the RankColourCode function in the SimpleFunctions class, which returns ChatColor for the players rank, use that to display the players name in that colour
                 }
-                // Call the RankColourCode function from the Main class, which returns ChatColor for the players rank, use that to display the players name in that colour
-                sender.sendMessage(ChatColor.GRAY + "• " + prefix + " " + ChatColor.RESET + SimpleFunctions.rankColourCode(player) + player.getName());
-                // Call the RankColourCode function in the SimpleFunctions class, which returns ChatColor for the players rank, use that to display the players name in that colour
 
             }
             return true;
