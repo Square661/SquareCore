@@ -1,6 +1,7 @@
 package commands.admin;
 
 import com.Square.RetronixFreeze.Main;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -26,7 +27,7 @@ public class Vanish implements CommandExecutor {
             if(player.hasPermission("sqc.vanish")) {
                 if(!vanished.contains(player)) {
                     vanished.add(player);
-                    player.sendMessage("§a(!) You have been vanished!");
+                    player.sendMessage(ChatColor.GREEN + "You have been vanished!");
                     for (Player p : plugin.getServer().getOnlinePlayers()) {
                         if (!p.hasPermission("sqc.vanish")) {
                             p.hidePlayer(plugin, player);
@@ -35,7 +36,7 @@ public class Vanish implements CommandExecutor {
                 }
                 else {
                     vanished.remove(player);
-                    player.sendMessage("§a(!) You have been unvanished!");
+                    player.sendMessage(ChatColor.GREEN + "You have been unvanished!");
                     for (Player p : plugin.getServer().getOnlinePlayers()) {
                         if (!p.hasPermission("sqc.vanish")) {
                             p.showPlayer(plugin, player);
@@ -43,11 +44,11 @@ public class Vanish implements CommandExecutor {
                     }
                     }
             }else {
-                player.sendMessage("§c(!) You do not have permission to use this command!");
-                return false;
+                player.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
+                return true;
             }
 
         }
-        return false;
+        return true;
     }
 }

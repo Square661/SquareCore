@@ -1,3 +1,4 @@
+commands\admin\Vanish.class
 events\PlayerMessageEvent.class
 commands\admin\SQLCheck.class
 commands\admin\Heal.class
