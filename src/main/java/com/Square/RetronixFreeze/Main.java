@@ -64,7 +64,7 @@ public class Main extends JavaPlugin {
         getCommand("checksql").setExecutor(new SQLCheck(SQL));
         getCommand("maintenance").setExecutor(new Maintenance(this));
         getCommand("setspawn").setExecutor(new SetSpawn());
-        getCommand("checkrank").setExecutor(new RankCheck());
+        getCommand("checkrank").setExecutor(new RankCheck(this));
         getCommand("vanish").setExecutor(new Vanish(this));
 
 
