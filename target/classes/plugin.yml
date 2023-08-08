@@ -76,3 +76,4 @@ commands:
 # /maintenance (/closeserver) - sqc.maintenance (sqc.staff excludes from maintenance mode)
 # /spawn (/hub) - sqc.spawn
 # /setspawn (/sethub) - sqc.setspawn
+# /vanish (/v) - sqc.vanish
