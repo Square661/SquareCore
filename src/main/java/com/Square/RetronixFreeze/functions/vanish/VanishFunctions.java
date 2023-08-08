@@ -22,11 +22,17 @@ public class VanishFunctions {
     public void toggleVanish(Player player) {
         if (isVanished(player)) {
             vanished.remove(player);
-            player.showPlayer(player); // Remove plugin parameter
+            for (Player onlinePlayer : plugin.getServer().getOnlinePlayers()) {
+                onlinePlayer.showPlayer(player);
+            }
             player.sendMessage(ChatColor.GRAY + "Vanish: " + ChatColor.DARK_GREEN + "Off");
         } else {
             vanished.add(player);
-            player.hidePlayer(player); // Remove plugin parameter
+            for (Player onlinePlayer : plugin.getServer().getOnlinePlayers()) {
+                if (!onlinePlayer.hasPermission("sqc.vanish.seevanished")) {
+                    onlinePlayer.hidePlayer(player);
+                }
+            }
             player.sendMessage(ChatColor.GRAY + "Vanish: " + ChatColor.GREEN + "On");
         }
     }
