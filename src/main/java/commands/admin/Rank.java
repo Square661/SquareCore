@@ -33,33 +33,51 @@ public class Rank implements CommandExecutor {
         if (args.length == 3 && args[0].equalsIgnoreCase("set")) {
             String targetPlayerName = args[1];
             String targetRank = args[2];
-            Player targetPlayer = plugin.getServer().getPlayer(targetPlayerName);
+
+            Player targetPlayer = null;
+            try {
+                targetPlayer = plugin.getServer().getPlayer(targetPlayerName);
+                plugin.rankFunctions.setRank(targetPlayer, targetRank);
+                ChatColor rankColor = RankFunctions.rankColourCode(targetPlayer);
+                player.sendMessage(ChatColor.GREEN + "You have set " + ChatColor.YELLOW + targetPlayer.getName() + ChatColor.GREEN + "'s rank to " + rankColor + targetRank + ChatColor.GREEN + ".");
+                return true;
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
 
             if (targetPlayer == null) {
                 player.sendMessage(ChatColor.RED + "Player " + targetPlayerName + " is not online ");
-                player.sendMessage(ChatColor.RED + "Searching for player in database to execute offline actions...");
-                player.sendMessage(targetPlayerName);
-                // Check plugin.SQL.getUUID(targetPlayerName) is not null, if it is null it means they are not found in database, so return true, otherwise getUUID will return the uuid, use that to set the rank
-                if (plugin.SQL.getUUID(targetPlayerName) == null) {
-                    player.sendMessage(ChatColor.RED + "Player " + targetPlayerName + " not found in database.");
+                player.sendMessage(ChatColor.GRAY + "Connecting to the database, to execute offline actions...");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                UUID targetPlayerUUID = plugin.SQL.getUUID(targetPlayerName);
+                if(targetPlayerUUID == null) {
+                    player.sendMessage(ChatColor.RED + "Player " + targetPlayerName + " not found in database. This player may not have joined the server before, if they have, please contact a developer." + ChatColor.GRAY + " Debug Code (#8359)");
                     return true;
-                } else {
-                    UUID targetUUID = plugin.SQL.getUUID(targetPlayerName);
-                    plugin.rankFunctions.setRankUUID(targetUUID, targetRank);
-                    player.sendMessage(ChatColor.GREEN + "You have set " + ChatColor.YELLOW + targetPlayerName + ChatColor.GREEN + "'s rank to " + ChatColor.YELLOW + targetRank);
+                }
+                try {
+                    targetPlayer = plugin.getServer().getOfflinePlayer(targetPlayerUUID).getPlayer();
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                    player.sendMessage(ChatColor.RED + "Player " + targetPlayerName + " not found in database. This player may not have joined the server before, if they have, please contact a developer." + ChatColor.GRAY + " Debug Code (#5493)");
                     return true;
                 }
 
+                    return true;
+                } else {
+                    plugin.rankFunctions.setRank(targetPlayer, targetRank);
+                }
 
+                ChatColor rankColor = RankFunctions.rankColourCode(targetPlayer);
+                player.sendMessage(ChatColor.GREEN + "You have set " + ChatColor.YELLOW + targetPlayer.getName() + ChatColor.GREEN + "'s rank to " + rankColor + targetRank + ChatColor.GREEN + ".");
+
+            } else {
+                player.sendMessage(ChatColor.RED + "Usage: /rank set <player> <rank>");
             }
-
-            plugin.rankFunctions.setRank(targetPlayer, targetRank);
-            ChatColor rankColor = RankFunctions.rankColourCode(targetPlayer);
-            player.sendMessage(ChatColor.GREEN + "You have set " + ChatColor.YELLOW + targetPlayer.getName() + ChatColor.GREEN + "'s rank to " + rankColor + targetRank);
-            return true;
-        } else {
-            player.sendMessage(ChatColor.RED + "Invalid arguments. Usage: /rank set <player> <rank>");
-            return true;
-        }
+        return false;
     }
 }
+

@@ -34,7 +34,7 @@ public class SQLCheck implements CommandExecutor {
             if (SQL.isConnected()) {
                 player.sendMessage(ChatColor.GREEN + "Connection is open.");
             } else if (!SQL.isConnected() || conn == null) {
-                player.sendMessage(ChatColor.RED + "Connection is closed.");
+                player.sendMessage(ChatColor.RED + "Connection is closed. Debug Code (#6006)");
             }
 
             String command = null;

@@ -70,9 +70,9 @@ public class RankFunctions {
             user.data().clear(NodeType.INHERITANCE::matches);
             // If the new rank is higher than the current rank
             if(targetRankWeight > currentRankWeight) {
-                rankChangeMessage = ChatColor.GREEN + "You have been promoted to " + rankColourCode(player) + rank + " rank.";
+                rankChangeMessage = ChatColor.GREEN + "You have been promoted to " + rankColourCode(player) + rank + ChatColor.GREEN + " rank.";
             } else if (targetRankWeight < currentRankWeight) {
-                rankChangeMessage = ChatColor.GREEN + "You have been" + ChatColor.RED + ChatColor.BOLD + " demoted to " + ChatColor.RESET + rankColourCode(player) + rank + " rank.";
+                rankChangeMessage = ChatColor.GREEN + "You have been" + ChatColor.RED + ChatColor.BOLD + " demoted " + ChatColor.RESET + ChatColor.GREEN + "to" + rankColourCode(player) + rank + " rank.";
             } else if (targetRankWeight == currentRankWeight) {
                 rankChangeMessage = ChatColor.GOLD + "You have been set to " + rankColourCode(player) + rank + " rank.";
             }

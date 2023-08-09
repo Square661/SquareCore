@@ -28,17 +28,13 @@ public class JoinEvent implements Listener {
         Connection conn = SQL.getConnection();
         Player player = event.getPlayer();
 
-        long loginTime = System.currentTimeMillis();
-        player.setMetadata("loginTime", new FixedMetadataValue(plugin, loginTime));
-        Bukkit.getLogger().severe("DEBUG - Player has joined the server and the login time has been set");
-
         try {
             if (conn.isClosed()) {
                 Bukkit.getLogger().info("SQL closed, attempting connect");
                 SQL.connect();
                 Bukkit.getLogger().info("CONNECTED");
             } else {
-                Bukkit.broadcastMessage(player.getAddress().getAddress().getHostAddress() + "has joined the server and the SQL connection is valid");
+                Bukkit.getLogger().info("[SquareCore] SQL connected");
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
