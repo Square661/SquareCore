@@ -45,9 +45,10 @@ public class RankFunctions {
     }
 
     public void setRank(Player player, String rank) {
-        api.getUserManager().modifyUser(player.getUniqueId(), user -> {
-            user.setPrimaryGroup(rank);
-        });
+        if(api.getGroupManager().getGroup(rank) == null) {
+            player.sendMessage(ChatColor.RED + "That rank does not exist!");
+            return;
+        }
         // Check if the rank they are being set to is higher weight or lower weight
         // If lower, send message saying they have been demoted to xxx
         // If higher they have been promoted to xxx
@@ -56,11 +57,6 @@ public class RankFunctions {
         Integer newWeight = api.getGroupManager().getGroup(rank).getWeight().orElse(0);
         ChatColor rankColour = rankColourCode(player);
         // hi nugs
-        User user = api.getUserManager().getUser(player.getUniqueId());
-        if(api.getGroupManager().getGroup(rank) == null) {
-            player.sendMessage(ChatColor.RED + "That rank does not exist!");
-            return;
-        }
         if(newWeight > currentWeight) {
             player.sendMessage(ChatColor.GREEN + "You have been promoted to " + rankColour + rank);
 
@@ -71,7 +67,10 @@ public class RankFunctions {
             player.sendMessage(ChatColor.GREEN + "You have been set to " + rankColour + rank);
 
         }
-        user.setPrimaryGroup(rank);
+
+        api.getUserManager().modifyUser(player.getUniqueId(), u -> {
+            u.setPrimaryGroup(rank);
+        });
     }
 
 
