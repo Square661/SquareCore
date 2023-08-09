@@ -90,6 +90,7 @@ public class Main extends JavaPlugin {
         getCommand("maintenance").setExecutor(new Maintenance(this));
         getCommand("setspawn").setExecutor(new SetSpawn());
         getCommand("vanish").setExecutor(new Vanish(this));
+        getCommand("ip").setExecutor(new IP(this));
 
 
 

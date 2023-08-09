@@ -30,6 +30,9 @@ public class PlayerMessageEvent implements Listener {
         String colouredPrefix = primaryGroupMeta.replace("&", "§");
         // Set their name to the colour of their rank
         ChatColor rankColor = RankFunctions.rankColourCode(player);
+        if(player.hasPermission("sqc.chat.color")) {
+            message = message.replace("&", "§");
+        }
         event.setFormat(colouredPrefix + " " + rankColor + player.getName() + ChatColor.RESET + ": " + message);
 
 

@@ -64,6 +64,11 @@ commands:
     usage: /rank help
     aliases:
       - "groups"
+  ip:
+    description: Get a player's IP
+    usage: /ip
+    aliases:
+      - "getip"
 
 
 # Permissions ~

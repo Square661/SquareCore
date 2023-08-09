@@ -23,10 +23,10 @@ public class MySQL {
     }
 
     public void connect() throws ClassNotFoundException, SQLException {
-       if (!isConnected()) {
-           connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=false",
-                   username, password);
-       }
+        if (!isConnected()) {
+            connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=false",
+                    username, password);
+        }
     }
 
     public void disconnect() {
@@ -104,7 +104,7 @@ public class MySQL {
         ZonedDateTime currentTimeGMT = ZonedDateTime.now(ZoneId.of("GMT"));
         Timestamp time = Timestamp.from(currentTimeGMT.toInstant());
 
-        if(joinorleave.equals("join")) {
+        if (joinorleave.equals("join")) {
             try {
                 Connection conn = getConnection();
                 String sql = "UPDATE player_data SET ip = ?, login_time = ? WHERE uuid = ?";
@@ -116,7 +116,7 @@ public class MySQL {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        } else if(joinorleave.equals("leave")) {
+        } else if (joinorleave.equals("leave")) {
             try {
                 Connection conn = getConnection();
                 String sql = "UPDATE player_data SET logout_time = ? WHERE uuid = ?";
@@ -150,8 +150,24 @@ public class MySQL {
 
     }
 
+    public String getIP(String player) {
+        // Search the database for the player's name, if found, return their IP, if not, return null
+        try {
+            Connection conn = getConnection();
+            String sql = "SELECT * FROM player_data WHERE username = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, player);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString("ip");
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
-
 
 
 
