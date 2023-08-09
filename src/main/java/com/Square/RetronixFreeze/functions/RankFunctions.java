@@ -57,10 +57,13 @@ public class RankFunctions {
         // hi nugs
         if(newWeight > currentWeight) {
             player.sendMessage(ChatColor.GREEN + "You have been promoted to " + rankColour + rank);
+            api.getUserManager().getUser(player.getName()).setPrimaryGroup(rank);
         } else if(newWeight < currentWeight) {
             player.sendMessage(ChatColor.RED + "You have been demoted to " + rankColour + rank);
+            api.getUserManager().getUser(player.getName()).setPrimaryGroup(rank);
         } else {
             player.sendMessage(ChatColor.GREEN + "You have been set to " + rankColour + rank);
+            api.getUserManager().getUser(player.getName()).setPrimaryGroup(rank);
         }
     }
 

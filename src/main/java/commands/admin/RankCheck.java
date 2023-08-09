@@ -4,6 +4,7 @@ import com.Square.RetronixFreeze.Main;
 import com.Square.RetronixFreeze.functions.RankFunctions;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -36,7 +37,7 @@ public class RankCheck implements CommandExecutor {
 
         if (args.length == 0) {
             sendPlayerRankInfo(player, player.getName(), primaryGroup);
-        } else if (args.length == 1) {
+        } else if (args.length == 1 && Bukkit.getPlayerExact(args[0]) != null) {
             String targetPlayer = args[0];
             Player targetPlayerObj = plugin.getServer().getPlayer(targetPlayer);
             if (targetPlayerObj == null) {
@@ -67,6 +68,8 @@ public class RankCheck implements CommandExecutor {
 
             sender.sendMessage(ChatColor.RED + "Incorrect usage! Use /rank set <player> <rank>");
             return true;
+
+
     }
 
     private void sendPlayerRankInfo(Player sender, String targetPlayer, String primaryGroup) {

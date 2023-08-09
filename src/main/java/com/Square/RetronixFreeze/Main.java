@@ -13,6 +13,7 @@ import commands.player.Spawn;
 import events.JoinEvent;
 import events.LeaveEvent;
 import events.PlayerMessageEvent;
+import jdk.nashorn.internal.objects.annotations.Getter;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.Bukkit;
@@ -84,7 +85,6 @@ public class Main extends JavaPlugin {
         getCommand("checkhealth").setExecutor(new HealthCheck());
         getCommand("list").setExecutor(new List(LuckPermsProvider.get(), this));
         getCommand("spawn").setExecutor(new Spawn());
-
 
         // Events
         getServer().getPluginManager().registerEvents(new JoinEvent(this, SQL), this);
