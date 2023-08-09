@@ -54,6 +54,7 @@ public class RankFunctions {
         Integer currentWeight = api.getGroupManager().getGroup(Objects.requireNonNull(api.getUserManager().getUser(player.getUniqueId())).getPrimaryGroup()).getWeight().orElse(0);
         Integer newWeight = api.getGroupManager().getGroup(rank).getWeight().orElse(0);
         ChatColor rankColour = rankColourCode(player);
+        // hi nugs
         if(newWeight > currentWeight) {
             player.sendMessage(ChatColor.GREEN + "You have been promoted to " + rankColour + rank);
         } else if(newWeight < currentWeight) {
