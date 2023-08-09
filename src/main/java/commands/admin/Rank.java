@@ -34,7 +34,7 @@ public class Rank implements CommandExecutor {
             Player targetPlayer = plugin.getServer().getPlayer(targetPlayerName);
 
             if (targetPlayer == null) {
-                player.sendMessage("Player " + targetPlayerName + " is not online or does not exist.");
+                player.sendMessage(ChatColor.RED + "Player " + targetPlayerName + " is not online ");
                 return true;
             }
 

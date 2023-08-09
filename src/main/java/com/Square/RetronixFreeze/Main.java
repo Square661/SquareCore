@@ -51,6 +51,18 @@ public class Main extends JavaPlugin {
             Bukkit.getLogger().info("LuckPerms not found!");
         }
 
+        // Check if the server has luckperms plugin jar installed IS NOT EQUAL TO NULL
+        if (Bukkit.getPluginManager().getPlugin("LuckPerms") != null) {
+            Bukkit.getLogger().info("[SquareCore] LuckPerms found!");
+            Bukkit.getLogger().info("[SquareCore] LuckPerms version: " + Bukkit.getPluginManager().getPlugin("LuckPerms").getDescription().getVersion());
+            getCommand("rank").setExecutor(new Rank(this));
+            Bukkit.getLogger().info("[SquareCore] Luckperms commands registered!");
+        } else {
+            Bukkit.getLogger().severe("[SquareCore] LuckPerms not found! Luck-perms related commands have not been registered!");
+        }
+
+
+
 
         this.SQL = new MySQL();
         this.messages = new Messages();
@@ -77,7 +89,7 @@ public class Main extends JavaPlugin {
         getCommand("maintenance").setExecutor(new Maintenance(this));
         getCommand("setspawn").setExecutor(new SetSpawn());
         getCommand("vanish").setExecutor(new Vanish(this));
-        getCommand("rank").setExecutor(new Rank(this));
+
 
 
         // Player commands
