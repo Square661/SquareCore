@@ -1,4 +1,6 @@
 # SquareCore
+![image](https://github.com/Square661/SquareCore/assets/80016717/dec20877-9c1f-4799-957b-de3a38cec703)
+
 
 SquareCore is a powerful and feature-rich plugin designed to enhance your Minecraft server experience. It offers a range of essential commands and functionalities for both players and administrators.
 
