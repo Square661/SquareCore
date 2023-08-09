@@ -1,4 +1,4 @@
-package com.Square.RetronixFreeze.functions.vanish;
+package com.Square.RetronixFreeze.functions;
 
 import com.Square.RetronixFreeze.Main;
 import org.bukkit.ChatColor;

@@ -1,8 +1,8 @@
 package commands.player;
 
 import com.Square.RetronixFreeze.Main;
-import com.Square.RetronixFreeze.functions.rank.RankFunctions;
-import com.Square.RetronixFreeze.functions.vanish.VanishFunctions;
+import com.Square.RetronixFreeze.functions.RankFunctions;
+import com.Square.RetronixFreeze.functions.VanishFunctions;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.ChatColor;
@@ -28,7 +28,7 @@ public class List implements CommandExecutor {
             int onlineCount = 0;
 
             for (Player player : players) {
-                if (!vanishFunctions.isVanished(player)) {
+                if (vanishFunctions.isVanished(player)) {
                     onlineCount++;
                 } else if (sender.hasPermission("sqc.vanish.seevanished")) {
                     onlineCount++;

@@ -1,7 +1,7 @@
 package commands.admin;
 
 import com.Square.RetronixFreeze.Main;
-import com.Square.RetronixFreeze.functions.vanish.VanishFunctions;
+import com.Square.RetronixFreeze.functions.RankFunctions;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.ChatColor;
@@ -14,19 +14,15 @@ import java.util.Objects;
 
 public class RankCheck implements CommandExecutor {
     private final LuckPerms api = LuckPermsProvider.get();
-
-    // Import mian
     private final Main plugin;
 
     public RankCheck(Main plugin) {
         this.plugin = plugin;
     }
 
-    public VanishFunctions vanishFunctions;
-
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!cmd.getName().equalsIgnoreCase("rankcheck")) {
+        if (!cmd.getName().equalsIgnoreCase("rank")) {
             return false;
         }
 
@@ -36,42 +32,55 @@ public class RankCheck implements CommandExecutor {
         }
 
         Player player = (Player) sender;
-        String targetPlayer = args.length == 0 ? player.getName() : args[0];
-        Player targetPlayer1 = plugin.getServer().getPlayer(targetPlayer);
+        String primaryGroup = api.getUserManager().getUser(player.getUniqueId()).getPrimaryGroup();
 
-        if (args.length > 1) {
-            sender.sendMessage(ChatColor.RED + "Incorrect usage! Use /rankcheck [player]");
+        if (args.length == 0) {
+            sendPlayerRankInfo(player, player.getName(), primaryGroup);
+        } else if (args.length == 1) {
+            String targetPlayer = args[0];
+            Player targetPlayerObj = plugin.getServer().getPlayer(targetPlayer);
+            if (targetPlayerObj == null) {
+                sender.sendMessage(ChatColor.RED + "Player " + targetPlayer + " is not online or does not exist.");
+                return true;
+            }
+            String targetPrimaryGroup = api.getUserManager().getUser(targetPlayerObj.getUniqueId()).getPrimaryGroup();
+            sendPlayerRankInfo(player, targetPlayerObj.getName(), targetPrimaryGroup);
+        } else if (args.length == 3 && args[0].equalsIgnoreCase("set")) {
+            String targetPlayer = args[1];
+            String newRank = args[2];
+            Player targetPlayerObj = plugin.getServer().getPlayer(targetPlayer);
+
+            if (targetPlayerObj == null) {
+                sender.sendMessage(ChatColor.RED + "Player " + targetPlayer + " is not online or does not exist.");
+                return true;
+            }
+
+            if (!player.hasPermission("sqc.rankcheck.set")) {
+                sender.sendMessage(ChatColor.RED + "You do not have permission to set ranks!");
+                return true;
+            }
+
+            // Call the setRank function from RankFunctions here
+            plugin.rankFunctions.setRank(targetPlayerObj, newRank);
             return true;
         }
 
-        String primaryGroup = Objects.requireNonNull(api.getUserManager().getUser(targetPlayer)).getPrimaryGroup();
-        String prefix = Objects.requireNonNull(api.getUserManager().getUser(targetPlayer)).getCachedData().getMetaData().getPrefix();
-        String suffix = Objects.requireNonNull(api.getUserManager().getUser(targetPlayer)).getCachedData().getMetaData().getSuffix();
-        String permissions = api.getUserManager().getUser(targetPlayer).getCachedData().getPermissionData().getPermissionMap().toString();
-
-        if (args.length == 0 || (args.length == 1 && player.hasPermission("sqc.rankcheck.extended"))) {
-            prefix = prefix.replace("&", "§");
-            suffix = suffix != null ? suffix.replace("&", "§") : "None";
-
-            // Format a message containing their rank, prefix, suffix, and permissions
-            sender.sendMessage(ChatColor.RED + "--------------------");
-            sender.sendMessage("Player » " + ChatColor.RESET + ChatColor.YELLOW + targetPlayer);
-            sender.sendMessage("Rank » " + ChatColor.YELLOW + Objects.requireNonNull(api.getGroupManager().getGroup(primaryGroup)).getDisplayName());
-            sender.sendMessage("Prefix » " + ChatColor.RESET + prefix);
-            sender.sendMessage("Suffix » " + ChatColor.RESET + suffix);
-            sender.sendMessage("Permissions » " + ChatColor.YELLOW + permissions);
-            sender.sendMessage("Vanished » " + ChatColor.YELLOW + vanishFunctions.isVanished(targetPlayer1));
-            sender.sendMessage(ChatColor.RED + "--------------------");
+            sender.sendMessage(ChatColor.RED + "Incorrect usage! Use /rank set <player> <rank>");
             return true;
+    }
 
-        } else if (args.length == 1 && player.hasPermission("sqc.rankcheck")) {
-            sender.sendMessage(ChatColor.YELLOW + targetPlayer + "'s rank is " + ChatColor.RESET + Objects.requireNonNull(api.getGroupManager().getGroup(primaryGroup)).getDisplayName());
-            prefix = prefix.replace("&", "§");
-            sender.sendMessage(ChatColor.YELLOW + "Their prefix is " + ChatColor.RESET + prefix);
-            return true;
-        } else {
-            sender.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
-            return true;
-        }
+    private void sendPlayerRankInfo(Player sender, String targetPlayer, String primaryGroup) {
+        String prefix = api.getUserManager().getUser(targetPlayer).getCachedData().getMetaData().getPrefix();
+        String suffix = api.getUserManager().getUser(targetPlayer).getCachedData().getMetaData().getSuffix();
+
+        // ... Other info retrieval ...
+
+        sender.sendMessage(ChatColor.RED + "--------------------");
+        sender.sendMessage("Player » " + ChatColor.RESET + ChatColor.YELLOW + targetPlayer);
+        sender.sendMessage("Rank » " + ChatColor.YELLOW + Objects.requireNonNull(api.getGroupManager().getGroup(primaryGroup)).getDisplayName());
+        sender.sendMessage("Prefix » " + ChatColor.RESET + prefix);
+        sender.sendMessage("Suffix » " + ChatColor.RESET + suffix);
+        // ... Other info display ...
+        sender.sendMessage(ChatColor.RED + "--------------------");
     }
 }

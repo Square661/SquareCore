@@ -1,7 +1,8 @@
 package commands.admin;
 
 import com.Square.RetronixFreeze.Main;
-import com.Square.RetronixFreeze.functions.vanish.VanishFunctions;
+import com.Square.RetronixFreeze.functions.Messages;
+import com.Square.RetronixFreeze.functions.VanishFunctions;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,10 +12,12 @@ import org.bukkit.entity.Player;
 public class Vanish implements CommandExecutor {
     private final Main plugin;
     private final VanishFunctions vanishFunctions;
+    public Messages messages;
 
     public Vanish(Main plugin) {
         this.plugin = plugin;
         this.vanishFunctions = new VanishFunctions(plugin); // Initialize the VanishFunctions instance
+        this.messages = new Messages();
     }
 
     @Override
@@ -24,7 +27,7 @@ public class Vanish implements CommandExecutor {
             if (player.hasPermission("sqc.vanish")) {
                 vanishFunctions.toggleVanish(player);
             } else {
-                player.sendMessage(ChatColor.RED + "You do not have permission to use this command!");
+                messages.noPermissionMessage(player);
             }
         }
         return true;

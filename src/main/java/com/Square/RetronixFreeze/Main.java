@@ -2,6 +2,9 @@ package com.Square.RetronixFreeze;
 
 import aEvent.PlayerClickListener;
 import com.Square.RetronixFreeze.SQL.MySQL;
+import com.Square.RetronixFreeze.functions.Messages;
+import com.Square.RetronixFreeze.functions.RankFunctions;
+import com.Square.RetronixFreeze.functions.VanishFunctions;
 import commands.admin.*;
 import commands.player.HealthCheck;
 import commands.player.Help;
@@ -25,6 +28,9 @@ public class Main extends JavaPlugin {
     public static boolean maintenance = false;
 
     public MySQL SQL;
+    public Messages messages;
+    public RankFunctions rankFunctions;
+    public VanishFunctions vanishFunctions;
 
     @Override
     public void onEnable() {
@@ -34,8 +40,11 @@ public class Main extends JavaPlugin {
         getServer().getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "[RF] Debug mode has been enabled.");
 
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+        LuckPerms api = null;
         if (provider != null) {
-            LuckPerms api = provider.getProvider();
+            api = provider.getProvider();
+            // Intaliase rank functions
+            this.rankFunctions = new RankFunctions(api, this);
 
         } else {
             Bukkit.getLogger().info("LuckPerms not found!");
@@ -43,6 +52,8 @@ public class Main extends JavaPlugin {
 
 
         this.SQL = new MySQL();
+        this.messages = new Messages();
+        this.vanishFunctions = new VanishFunctions(this);
         try {
             SQL.connect();
         } catch (ClassNotFoundException e) {
@@ -53,7 +64,7 @@ public class Main extends JavaPlugin {
             Bukkit.getLogger().info("Database connection failed.");
         }
 
-        if(SQL.isConnected()) {
+        if (SQL.isConnected()) {
             Bukkit.getLogger().info("Database is connected!");
         }
 
@@ -64,7 +75,7 @@ public class Main extends JavaPlugin {
         getCommand("checksql").setExecutor(new SQLCheck(SQL));
         getCommand("maintenance").setExecutor(new Maintenance(this));
         getCommand("setspawn").setExecutor(new SetSpawn());
-        getCommand("checkrank").setExecutor(new RankCheck(this));
+        getCommand("rank").setExecutor(new RankCheck(this));
         getCommand("vanish").setExecutor(new Vanish(this));
 
 
@@ -75,17 +86,12 @@ public class Main extends JavaPlugin {
         getCommand("spawn").setExecutor(new Spawn());
 
 
-
-
-
         // Events
         getServer().getPluginManager().registerEvents(new JoinEvent(this, SQL), this);
         getServer().getPluginManager().registerEvents(new LeaveEvent(this, SQL), this);
         getServer().getPluginManager().registerEvents(new PlayerMessageEvent(), this);
 
         // getServer().getPluginManager().registerEvents(new PlayerClickListener(this), this);
-
-
 
 
     }

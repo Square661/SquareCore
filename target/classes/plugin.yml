@@ -54,11 +54,9 @@ commands:
     usage: /setspawn
     aliases:
       - "sethub"
-  rankcheck:
+  rank:
     description: Check a players rank
-    usage: /rankcheck <player>
-    aliases:
-      - "checkrank"
+    usage: /rank
   vanish:
     description: Toggle vanish
     usage: /vanish

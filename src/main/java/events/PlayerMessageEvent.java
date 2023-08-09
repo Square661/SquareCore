@@ -1,6 +1,6 @@
 package events;
 
-import com.Square.RetronixFreeze.functions.rank.RankFunctions;
+import com.Square.RetronixFreeze.functions.RankFunctions;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.ChatColor;
@@ -23,6 +23,9 @@ public class PlayerMessageEvent implements Listener {
         String primaryGroup = (Objects.requireNonNull(api.getUserManager().getUser(player.getUniqueId()))).getPrimaryGroup();
         String primaryGroupMeta = Objects.requireNonNull(api.getUserManager().getUser(player.getUniqueId())).getCachedData().getMetaData().getPrefix();
         String primaryGroupName = Objects.requireNonNull(api.getGroupManager().getGroup(primaryGroup)).getName();
+        if(primaryGroupMeta == null) {
+            primaryGroupMeta = "&7";
+        }
 
         String colouredPrefix = primaryGroupMeta.replace("&", "§");
         // Set their name to the colour of their rank
