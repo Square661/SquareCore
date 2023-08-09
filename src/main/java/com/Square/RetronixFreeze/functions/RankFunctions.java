@@ -3,11 +3,22 @@ package com.Square.RetronixFreeze.functions;
 import com.Square.RetronixFreeze.Main;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
+import net.luckperms.api.model.user.UserManager;
+import net.luckperms.api.node.Node;
+import net.luckperms.api.node.NodeBuilder;
+import net.luckperms.api.node.NodeType;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.model.user.User;
+import net.luckperms.api.model.user.UserManager;
+import net.luckperms.api.node.Node;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
+import java.util.function.Predicate;
 
 public class RankFunctions {
 
@@ -45,32 +56,60 @@ public class RankFunctions {
     }
 
     public void setRank(Player player, String rank) {
-        if(api.getGroupManager().getGroup(rank) == null) {
-            player.sendMessage(ChatColor.RED + "That rank does not exist!");
-            return;
-        }
-        // Check if the rank they are being set to is higher weight or lower weight
-        // If lower, send message saying they have been demoted to xxx
-        // If higher they have been promoted to xxx
-        // If same, they have been set to xxx
-        Integer currentWeight = api.getGroupManager().getGroup(Objects.requireNonNull(api.getUserManager().getUser(player.getUniqueId())).getPrimaryGroup()).getWeight().orElse(0);
-        Integer newWeight = api.getGroupManager().getGroup(rank).getWeight().orElse(0);
-        ChatColor rankColour = rankColourCode(player);
-        // hi nugs
-        if(newWeight > currentWeight) {
-            player.sendMessage(ChatColor.GREEN + "You have been promoted to " + rankColour + rank);
+        UserManager userManager = api.getUserManager();
+        User user = userManager.getUser(player.getUniqueId());
+        Group targetGroup = api.getGroupManager().getGroup(rank);
+        String rankChangeMessage = "";
+        Integer currentRankWeight = Objects.requireNonNull(api.getGroupManager().getGroup(user.getPrimaryGroup())).getWeight().orElse(0);
+        Integer targetRankWeight = Objects.requireNonNull(api.getGroupManager().getGroup(rank)).getWeight().orElse(0);
 
-        } else if(newWeight < currentWeight) {
-            player.sendMessage(ChatColor.RED + "You have been demoted to " + rankColour + rank);
 
+        if (targetGroup != null) {
+            // Remove all existing group nodes
+            user.data().clear(NodeType.INHERITANCE::matches);
+            // If the new rank is higher than the current rank
+            if(targetRankWeight > currentRankWeight) {
+                rankChangeMessage = ChatColor.GREEN + "You have been promoted to " + rankColourCode(player) + rank + " rank.";
+            } else if (targetRankWeight < currentRankWeight) {
+                rankChangeMessage = ChatColor.GREEN + "You have been" + ChatColor.RED + ChatColor.BOLD + " demoted to " + ChatColor.RESET + rankColourCode(player) + rank + " rank.";
+            } else if (targetRankWeight == currentRankWeight) {
+                rankChangeMessage = ChatColor.GOLD + "You have been set to " + rankColourCode(player) + rank + " rank.";
+            }
+
+            // Add the new group node
+            user.data().add(Node.builder("group." + rank).build());
+
+            // Save the user data to LuckPerms
+            userManager.saveUser(user);
+
+            ChatColor rankColor = rankColourCode(player);
+            String rankName = targetGroup.getName();
+
+            player.sendMessage(rankChangeMessage);
+            player.sendMessage(ChatColor.GRAY + "Prefix: " + rankPrefix(player));
         } else {
-            player.sendMessage(ChatColor.GREEN + "You have been set to " + rankColour + rank);
-
+            player.sendMessage(ChatColor.RED + "Failed to set rank. Please try again later.");
         }
+    }
 
-        api.getUserManager().modifyUser(player.getUniqueId(), u -> {
-            u.setPrimaryGroup(rank);
-        });
+
+
+    public String getRankInformation(Player player) {
+        // Get the group name of the player
+        String primaryGroup = (Objects.requireNonNull(api.getUserManager().getUser(player.getUniqueId()))).getPrimaryGroup();
+        String groupName = Objects.requireNonNull(api.getGroupManager().getGroup(primaryGroup)).getName();
+        String permissions = Objects.requireNonNull(api.getUserManager().getUser(player.getUniqueId())).getCachedData().getPermissionData().getPermissionMap().toString();
+        String prefix = rankPrefix(player);
+
+        String finalMessage = "&7&m---------------------\n" +
+                // Username, rank name, prefix, permissions, rank colour
+                "&7Username: &f" + player.getName() + "\n" +
+                "&7Rank: " + rankColourCode(player) + groupName + "\n" +
+                "&7Prefix: " + prefix + "\n" +
+                "&7Permissions: " + permissions + "\n" +
+                "&7Rank Colour: " + rankColourCode(player) + "▢▢▢" + "\n" +
+                "&7&m---------------------";
+        return finalMessage.replace("&", "§");
     }
 
 

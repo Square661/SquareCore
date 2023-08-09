@@ -8,13 +8,14 @@ aEvent\PlayerClickListener.class
 com\Square\RetronixFreeze\functions\Messages.class
 events\LeaveEvent.class
 commands\admin\Gamemode.class
-commands\admin\RankCheck.class
 commands\admin\SetSpawn.class
 com\Square\RetronixFreeze\functions\RankFunctions.class
 com\Square\RetronixFreeze\functions\VanishFunctions.class
 commands\admin\Maintenance.class
 com\Square\RetronixFreeze\SQL\MySQL.class
+commands\player\Ping.class
 commands\admin\StaffMode.class
 com\Square\RetronixFreeze\Main.class
+commands\admin\Rank.class
 commands\player\Help.class
 events\JoinEvent.class

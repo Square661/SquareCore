@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: C:\Users\user\Desktop\Plugins\SquareCoreWorking\out\producti
+ on\SquareCore\com\Square\RetronixFreeze\Main.class
+
