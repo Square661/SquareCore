@@ -3,6 +3,7 @@ package com.Square.RetronixFreeze.functions;
 import com.Square.RetronixFreeze.Main;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.model.user.User;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -55,16 +56,22 @@ public class RankFunctions {
         Integer newWeight = api.getGroupManager().getGroup(rank).getWeight().orElse(0);
         ChatColor rankColour = rankColourCode(player);
         // hi nugs
+        User user = api.getUserManager().getUser(player.getUniqueId());
+        if(api.getGroupManager().getGroup(rank) == null) {
+            player.sendMessage(ChatColor.RED + "That rank does not exist!");
+            return;
+        }
         if(newWeight > currentWeight) {
             player.sendMessage(ChatColor.GREEN + "You have been promoted to " + rankColour + rank);
-            api.getUserManager().getUser(player.getName()).setPrimaryGroup(rank);
+
         } else if(newWeight < currentWeight) {
             player.sendMessage(ChatColor.RED + "You have been demoted to " + rankColour + rank);
-            api.getUserManager().getUser(player.getName()).setPrimaryGroup(rank);
+
         } else {
             player.sendMessage(ChatColor.GREEN + "You have been set to " + rankColour + rank);
-            api.getUserManager().getUser(player.getName()).setPrimaryGroup(rank);
+
         }
+        user.setPrimaryGroup(rank);
     }
 
 
