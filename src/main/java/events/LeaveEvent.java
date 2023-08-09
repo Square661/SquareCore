@@ -24,36 +24,12 @@ public class LeaveEvent implements Listener {
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) throws SQLException {
         Player player = event.getPlayer();
-        long loginTime = player.getMetadata("loginTime").get(0).asLong();
-        long logoutTime = System.currentTimeMillis();
-        long playtime = logoutTime - loginTime;
 
-        SQL.savePlaytime(player, String.valueOf(playtime), "date");
-
-        // Save the playtime to the database
-        Connection conn = SQL.getConnection();
-        long currentPlaytime = 0;
-        Statement stmt = conn.createStatement();
-        String query = "SELECT playtime FROM playtime WHERE username='" + player.getName() + "';";
-        try (ResultSet rs = stmt.executeQuery(query)) {
-            if (rs.next()) {
-                currentPlaytime = rs.getLong("playtime");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        // Calculate the new playtime
-        long newPlaytime = currentPlaytime + playtime;
-
-        // Update the playtime for the player
-        query = "UPDATE playtime SET playtime=" + newPlaytime + " WHERE username='" + player.getName() + "';";
-        try {
-            stmt.executeUpdate(query);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        SQL.updatePlayer(player, "leave");
 
 
     }
+
+
+
 }

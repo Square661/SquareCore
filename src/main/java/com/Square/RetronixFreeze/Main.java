@@ -79,6 +79,7 @@ public class Main extends JavaPlugin {
 
         if (SQL.isConnected()) {
             Bukkit.getLogger().info("Database is connected!");
+            SQL.createTable();
         }
 
 

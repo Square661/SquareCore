@@ -18,6 +18,7 @@ import net.luckperms.api.node.Node;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 public class RankFunctions {
@@ -92,7 +93,39 @@ public class RankFunctions {
         }
     }
 
+    public void setRankUUID(UUID uuid, String rank) {
+        UserManager userManager = api.getUserManager();
+        User user = userManager.getUser(uuid);
+        Group targetGroup = api.getGroupManager().getGroup(rank);
+        String rankChangeMessage = "";
+        Integer currentRankWeight = Objects.requireNonNull(api.getGroupManager().getGroup(user.getPrimaryGroup())).getWeight().orElse(0);
+        Integer targetRankWeight = Objects.requireNonNull(api.getGroupManager().getGroup(rank)).getWeight().orElse(0);
 
+        if (targetGroup != null) {
+            // Remove all existing group nodes
+            user.data().clear(NodeType.INHERITANCE::matches);
+            // If the new rank is higher than the current rank
+            if (targetRankWeight > currentRankWeight) {
+                rankChangeMessage = ChatColor.GREEN + "You have been promoted to " + rank + " rank.";
+            } else if (targetRankWeight < currentRankWeight) {
+                rankChangeMessage = ChatColor.GREEN + "You have been" + ChatColor.RED + ChatColor.BOLD + " demoted to " + ChatColor.RESET + rank + " rank.";
+            } else if (targetRankWeight == currentRankWeight) {
+                rankChangeMessage = ChatColor.GOLD + "You have been set to " + rank + " rank.";
+            }
+
+            // Add the new group node
+            user.data().add(Node.builder("group." + rank).build());
+
+            // Save the user data to LuckPerms
+            userManager.saveUser(user);
+
+            String rankName = targetGroup.getName();
+
+        } else {
+            System.out.println("Failed to set rank. Please try again later.");
+        }
+
+    }
 
     public String getRankInformation(Player player) {
         // Get the group name of the player

@@ -44,6 +44,12 @@ public class JoinEvent implements Listener {
             e.printStackTrace();
         }
 
+        if(SQL.playerExists(event.getPlayer())) {
+            SQL.updatePlayer(event.getPlayer(), "join");
+        } else {
+            SQL.createPlayer(event.getPlayer());
+        }
+
     }
 }
 

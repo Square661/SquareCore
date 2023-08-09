@@ -8,6 +8,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class Rank implements CommandExecutor {
     private final Main plugin;
 
@@ -35,7 +37,20 @@ public class Rank implements CommandExecutor {
 
             if (targetPlayer == null) {
                 player.sendMessage(ChatColor.RED + "Player " + targetPlayerName + " is not online ");
-                return true;
+                player.sendMessage(ChatColor.RED + "Searching for player in database to execute offline actions...");
+                player.sendMessage(targetPlayerName);
+                // Check plugin.SQL.getUUID(targetPlayerName) is not null, if it is null it means they are not found in database, so return true, otherwise getUUID will return the uuid, use that to set the rank
+                if (plugin.SQL.getUUID(targetPlayerName) == null) {
+                    player.sendMessage(ChatColor.RED + "Player " + targetPlayerName + " not found in database.");
+                    return true;
+                } else {
+                    UUID targetUUID = plugin.SQL.getUUID(targetPlayerName);
+                    plugin.rankFunctions.setRankUUID(targetUUID, targetRank);
+                    player.sendMessage(ChatColor.GREEN + "You have set " + ChatColor.YELLOW + targetPlayerName + ChatColor.GREEN + "'s rank to " + ChatColor.YELLOW + targetRank);
+                    return true;
+                }
+
+
             }
 
             plugin.rankFunctions.setRank(targetPlayer, targetRank);
