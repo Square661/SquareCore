@@ -83,8 +83,7 @@ public class List implements CommandExecutor {
 
 //            Player[] players = Bukkit.getServer().getOnlinePlayers().toArray(new Player[0]);
 //            sender.sendMessage(ChatColor.YELLOW + "Players online (" + players.length + "):");
-//            // TODO - Make this display the player's name in the same colour as their rank.
-//            // TODO - Possibly check their rank and then set the colour of the name accordingly based on a switch statement which can be in their main class and accessible from all classes.
+//          s and accessible from all classes.
 //
 //            for (Player player : players) {
 //                String prefix = api.getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix();
